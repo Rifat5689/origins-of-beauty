@@ -4,7 +4,6 @@ import { ApiResponse } from "../../utils/ApiResponse";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { generateAccessAndRefreshToken } from "../../utils/specialMethods";
 import User from "./user.model";
-import mongoose from "mongoose";
 import jwt from "jsonwebtoken"; 
 
 const register = asyncHandler(async (req, res) => {
@@ -72,7 +71,7 @@ delete safeUser.password;
           ...cookieOptions, 
          maxAge : 365*24*60*60*1000 , 
     
-      }).status(200).json(new ApiResponse(200 ,user , "login successfull "  ))
+      }).status(200).json(new ApiResponse(200 ,safeUser , "login successfull "  ))
 })
 
 const logOut = asyncHandler(async (req, res) =>{ 
@@ -112,9 +111,9 @@ const refreshToken = asyncHandler(async(req,res) =>{
 
 
 
-   const {accessToken , refreshToken} = await generateAccessAndRefreshToken(_id) ;
+   const {accessToken , refreshToken:newRefreshToken} = await generateAccessAndRefreshToken(_id) ;
    res.cookie("accessToken", accessToken , {...cookieOptions ,maxAge: 24 * 60 * 60 * 1000 }).
-   cookie("refreshToken" , refreshToken , {...cookieOptions , maxAge: 365* 24 * 60 * 60 * 1000})
+   cookie("refreshToken" , newRefreshToken , {...cookieOptions , maxAge: 365* 24 * 60 * 60 * 1000})
    .status(200).json(new ApiResponse(200 ,  "Token refreshed successfully")) 
    
 })
