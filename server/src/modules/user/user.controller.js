@@ -1,14 +1,14 @@
 
-import ApiError from "../../utils/ApiError";
-import { ApiResponse } from "../../utils/ApiResponse";
-import { asyncHandler } from "../../utils/asyncHandler";
-import { generateAccessAndRefreshToken } from "../../utils/specialMethods";
-import User from "./user.model";
+import ApiError from "../../utils/ApiError.js";
+import { ApiResponse } from "../../utils/ApiResponse.js";
+import { asyncHandler } from "../../utils/asyncHandler.js";
+import { generateAccessAndRefreshToken } from "../../utils/specialMethods.js";
+import User from "./user.model.js";
 import jwt from "jsonwebtoken"; 
 
 const register = asyncHandler(async (req, res) => {
      
-     const {name , email, password } = req.body  
+     const {name , email, password } = req.body   ;
 
       if(!name ) throw new ApiError(400,"username required") ; 
       if(!email) throw new ApiError(400, "email required") ; 
@@ -45,13 +45,13 @@ const register = asyncHandler(async (req, res) => {
   httpOnly: true,
   secure: true
 };
-const login = asyncHandler(async (req,res) => {
+const logIn = asyncHandler(async (req,res) => {
 
-   const {gmail  , password} = req.body ; 
+   const {email  , password} = req.body ; 
 
-   if(!gmail) throw new ApiError(400, "gmail required") ; 
+   if(!email) throw new ApiError(400, "email required") ; 
    if(!password) throw new ApiError (400 , "password required") ; 
-   let user =await  User.findOne({gmail});
+   let user =await  User.findOne({email});
     if(!user) throw new ApiError(404 , "User not found ") ; 
 
    const isMatch =await  user.isPasswordCorrect(password) ; 
@@ -61,6 +61,7 @@ const login = asyncHandler(async (req,res) => {
     const {accessToken, refreshToken} = await generateAccessAndRefreshToken(user._id) ; 
  const safeUser = user.toObject();
 delete safeUser.password;
+delete safeUser.refreshToken ; 
     res.cookie("accessToken", accessToken ,{
       ...cookieOptions, 
            maxAge: 24 * 60 * 60 * 1000, 
@@ -76,8 +77,8 @@ delete safeUser.password;
 
 const logOut = asyncHandler(async (req, res) =>{ 
  
-   const {gmail} = req.user ; 
-   const user = await User.findOneAndUpdate({gmail},
+   const {email} = req.user ; 
+   const user = await User.findOneAndUpdate({email},
       {
          $set : {refreshToken : null} 
       },
@@ -117,3 +118,7 @@ const refreshToken = asyncHandler(async(req,res) =>{
    .status(200).json(new ApiResponse(200 ,  "Token refreshed successfully")) 
    
 })
+
+
+
+export {register , logIn , logOut , refreshToken} ;

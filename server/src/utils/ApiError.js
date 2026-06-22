@@ -13,8 +13,6 @@ class ApiError extends Error {
         this.success = false
         this.errors = errors
 
-        // NEW: Set error name for better debugging — "ApiError" shows up in logs
-        // instead of generic "Error", making it easier to trace issues
         this.name = this.constructor.name
 
         if (stack) {
