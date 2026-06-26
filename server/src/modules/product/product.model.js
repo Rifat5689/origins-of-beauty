@@ -7,7 +7,7 @@ const imageSchema = new mongoose.Schema({
         type : String , 
         required : true 
      },
-     public_id : {type:String , required : true } ; 
+     public_id : {type:String , required : true } 
 
 },{_id: false})
 
@@ -53,10 +53,9 @@ totalViews : {type : Number , default : 0} ,
 
 
 
-
-
-
-
-},{
+,{
      timestamps : true 
 })
+
+const Product = mongoose.Model("Product", productSchema) ; 
+export default Product ; 
