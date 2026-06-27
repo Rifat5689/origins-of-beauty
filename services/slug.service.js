@@ -1,6 +1,6 @@
 import Product from "../modules/product/product.model.js";
 import ApiError from "../utils/ApiError.js";
-import { createSlug } from "./server/src/utils/slug.js";
+import { createSlug } from "../server/src/utils/slug.js";
 
 export const generateUniqueSlug= async (text, excludeId = null) => {
   const baseSlug = createSlug(text);

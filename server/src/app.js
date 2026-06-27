@@ -5,6 +5,8 @@ import cookieParser from 'cookie-parser'
 import { router as userRouter } from './modules/user/user.routes.js';
 import { createCategory } from './modules/category/category.controller.js';
 import categoryRouter from './modules/category/category.routes.js';
+import productRouter from './modules/product/product.routes.js';
+import cartRouter from './modules/cart/cart.routes.js';
 const app = express() ; 
 const port = process.env.PORT || 4000  ; 
 
@@ -12,7 +14,7 @@ app.use(express.json()) ;
 app.use(express.urlencoded({ extended: true }));
 
 
-const allowedOrigins = ["http://localhost:5173", "https://yourdomain.com"];
+const allowedOrigins = ["http://localhost:5173", "https://mydomain.com"];
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -34,7 +36,9 @@ app.use(cookieParser());
 ///api routes 
 
 app.use("/api/v1/users",userRouter) ;
-app.use("/category",categoryRouter) ; 
+app.use("api/v1/category",categoryRouter) ; 
+app.use("api/v1/products",productRouter ) ; 
+app.use("/api/v1/cart",cartRouter ) ; 
 
 
 
