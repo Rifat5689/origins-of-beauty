@@ -1,10 +1,10 @@
-import { generateUniqueSlug } from "../../../../slug.service";
-import ApiError from "../../utils/ApiError";
-import { ApiResponse } from "../../utils/ApiResponse";
-import { asyncHandler } from "../../utils/asyncHandler";
-import uploadImages from "../../utils/uploadImages";
-import Product from "./product.model";
-import { getPagination } from "./product.utils";
+﻿import { generateUniqueSlug } from "../../../../services/slug.service.js";
+import ApiError from "../../utils/ApiError.js";
+import { ApiResponse } from "../../utils/ApiResponse.js";
+import { asyncHandler } from "../../utils/asyncHandler.js";
+import uploadImages from "../../utils/uploadImages.js";
+import Product from "./product.model.js";
+import { getPagination } from "./product.utils.js";
 
 
 const createProduct = asyncHandler(async(req,res) =>{
@@ -50,7 +50,7 @@ const createProduct = asyncHandler(async(req,res) =>{
 
       }); 
 
-      res.status(200).
+      return res.status(200).
       json(new ApiResponse (200 , product , "product created successfully")) 
         
 })
@@ -59,9 +59,9 @@ const getAllPrdoucts = asyncHandler(async(req,res) =>
 {
      const {limit , skip , page } = getPagination(req.query) ;
 
-     const products = await Product.find().sort({createdAt:-1}).skip(skip).limit(limit).select("__v") ; 
+     const products = await Product.find().sort({createdAt:-1}).skip(skip).limit(limit).select(" -__v") ; 
      if(!products.length) throw new ApiError(404 , "Prodcuts not found")  ;
-     res.status(200).json(
+     return res.status(200).json(
         new ApiResponse(200 , products , "product sent successfully") 
 
      )
@@ -71,10 +71,12 @@ const getAllPrdoucts = asyncHandler(async(req,res) =>
 
 const getProductById = asyncHandler(async(req,res) =>{
 
+    const {id} = req.params ; 
+
     if(!id) throw new ApiError(400 , "Invalid request") ; 
     const product = await Product.findById(id) ; 
     if(!product ) throw new ApiError(404, "Product not found") ; 
-    res.status(200).
+    return res.status(200).
     json(new ApiResponse(200, product , "product sent successfully"))
 })
 
@@ -82,14 +84,14 @@ const getProductByslug = asyncHandler(async(req,res) =>{
     const {slug} = req.params ; 
     const product = await Product.findOne({slug}) ; 
     if(!product ) throw new ApiError(404, "Product not found") ; 
-    res.status(200).
+    return res.status(200).
     json(new ApiResponse(200, product , "product sent successfully"))
 
 })
 
 const updateProduct = asyncHandler(async(req,res) =>{
 
-
+      const {id} = req.params ; 
      const updatedContent = {...req.body} ; 
      const updatedProduct = await Product.findByIdAndUpdate(id , 
         updatedContent , 
@@ -97,7 +99,7 @@ const updateProduct = asyncHandler(async(req,res) =>{
  } 
      )
      if(!updatedProduct) throw new ApiError(404 , "Product not found " ) ; 
-     res.status(200).json(
+     return res.status(200).json(
         new ApiResponse(200, updatedProduct , "Product updated successfully") 
      )
 

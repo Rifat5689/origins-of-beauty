@@ -36,8 +36,8 @@ app.use(cookieParser());
 ///api routes 
 
 app.use("/api/v1/users",userRouter) ;
-app.use("api/v1/category",categoryRouter) ; 
-app.use("api/v1/products",productRouter ) ; 
+app.use("/api/v1/category",categoryRouter) ; 
+app.use("/api/v1/products",productRouter ) ; 
 app.use("/api/v1/cart",cartRouter ) ; 
 
 
@@ -65,3 +65,4 @@ app.use((err, req, res,next) => {
 app.listen(port , ()=>{console.log('the app is running on ', port) });
 
 export default app ; 
+

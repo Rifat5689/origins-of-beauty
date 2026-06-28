@@ -1,20 +1,20 @@
-import ApiError from "../../utils/ApiError";
-import { ApiResponse } from "../../utils/ApiResponse";
-import { asyncHandler } from "../../utils/asyncHandler";
-import { Cart } from "./cart.model";
+import ApiError from "../../utils/ApiError.js";
+import { ApiResponse } from "../../utils/ApiResponse.js";
+import { asyncHandler } from "../../utils/asyncHandler.js";
+import { Cart } from "./cart.model.js";
 
 const createCart = asyncHandler(async(req,res) =>{
 
 
     const {productId , quantity  } = req.body ; 
     const userId = req.user._id ; 
-    
+        if (!userId || !productId || !quantity)  throw new ApiError(400, "All fields are required."); 
+        if (quantity < 1) throw new ApiError(400, "Quantity must be at least 1."); 
+
         const productItem = {
             productId, 
             quantity 
         }
-        if (!userId || !productId || !quantity)  throw new ApiError(400, "All fields are required."); 
-        if (quantity < 1) throw new ApiError(400, "Quantity must be at least 1."); 
     
     const existingCart = await Cart.findOne({userId}) ; 
 
@@ -67,7 +67,7 @@ const getCart = asyncHandler(async(req, res)=>{
     if(!cart) return res.status(200).json(
         new ApiResponse(200 , [], "Cart is empty" ) 
     )
-    return res.stauts(200).json(
+    return res.status(200).json(
         new ApiResponse(200,cart , "Cart sent successfully") 
     )
 

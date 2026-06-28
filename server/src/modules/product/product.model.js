@@ -20,7 +20,7 @@ const imageSchema = new mongoose.Schema({
 const productSchema = new mongoose.Schema({
 
 name : {
-    type : String , requird :true , trim : true 
+    type : String , required :true , trim : true 
 
 },
 title : {type : String,  default : ""} ,
@@ -57,5 +57,5 @@ totalViews : {type : Number , default : 0} ,
      timestamps : true 
 })
 
-const Product = mongoose.Model("Product", productSchema) ; 
+const Product = mongoose.model("Product", productSchema) ; 
 export default Product ; 

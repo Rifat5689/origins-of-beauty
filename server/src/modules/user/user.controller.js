@@ -2,9 +2,10 @@
 import ApiError from "../../utils/ApiError.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
-import { generateAccessAndRefreshToken } from "../../utils/specialMethods.js";
 import User from "./user.model.js";
 import jwt from "jsonwebtoken"; 
+import { cookieOptions, generateAccessAndRefreshToken } from "./user.utils.js";
+
 
 const register = asyncHandler(async (req, res) => {
      
@@ -27,24 +28,19 @@ const register = asyncHandler(async (req, res) => {
       res.
       cookie("accessToken", accessToken ,{
            maxAge: 24 * 60 * 60 * 1000, 
-           httpOnly: true,       
-           secure : true 
+          ...cookieOptions
 
       } ).
       cookie("refreshToken" ,refreshToken ,{
          maxAge : 365*24*60*60*1000 , 
-         httpOnly : true , 
-         secure : true 
+          ...cookieOptions
       }).status(201).json(
         new ApiResponse(201,createdUser, 'user created successfully ' )
       )
       
 
 })
- const cookieOptions = {
-  httpOnly: true,
-  secure: true
-};
+
 const logIn = asyncHandler(async (req,res) => {
 
    const {email  , password} = req.body ; 

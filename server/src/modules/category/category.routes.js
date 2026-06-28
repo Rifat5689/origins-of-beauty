@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { categoryById, createCategory } from "./category.controller";
+import { categoryById, createCategory } from "./category.controller.js";
 
 
 
@@ -9,6 +9,6 @@ import { categoryById, createCategory } from "./category.controller";
 const categoryRouter= Router() ; 
 
 categoryRouter.route("/").post(createCategory) ; 
-categoryRouter.route("/:id").post(categoryById) ; 
+categoryRouter.route("/:id").get(categoryById) ; 
 
 export default categoryRouter ; 

@@ -1,5 +1,5 @@
-import User from "../modules/user/user.model.js"
-import ApiError from "./ApiError.js";
+import ApiError from "../../utils/ApiError.js";
+import User from "./user.model.js";
 
 const generateAccessAndRefreshToken = async (id) =>
 {
@@ -12,4 +12,10 @@ const user = await User.findById(id)  ;
     return {accessToken , refreshToken} ; 
 
 }
-export {generateAccessAndRefreshToken} ; 
+
+ const cookieOptions = {
+  httpOnly: true,
+  secure: true
+};
+
+export {generateAccessAndRefreshToken,cookieOptions} ; 
